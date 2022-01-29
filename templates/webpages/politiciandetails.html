@@ -5,18 +5,17 @@
 
 {% block content %}
 
-<script src="{% static 'js/politicianDetails.js' %}"></script>
 {% for politicianDetails in details %}
 <div>
     <img loading="lazy" src="{{ politicianDetails.photo.url }}" alt="{{ politicianDetails.first_name }}"
         class="ng-star-inserted", style="width: 80px;">
     <a>{{ politicianDetails.first_name }}</a>
     <span>{{ politicianDetails.last_name }}</span>
-    <p>{{ total_likes }} Like</p>
     <div id="like-section">
         {% include 'webpages/like_section.html' %}
-        
     </div>
 </div>
 {% endfor %}
+
 {% endblock %}
+

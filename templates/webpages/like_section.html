@@ -1,10 +1,9 @@
 {% if request.user.is_authenticated %}
-<form action="{% url 'like_post' %}" method="post">
-    {% csrf_token %}
-    {% if is_liked %}
-        <button type="button" id="like" name="post_id" value="{{ politicianDetails.id }}" class="btn btn-danger">Dislike</button>
+<form action="{% url 'likepost' %}" method="post">
+    {% if userss in politicianDetails.likes %}
+        <button type="submit" id="like" name="post_id" value="{{ politicianDetails.id }}" class="btn btn-danger">Dislike</button>
     {% else %}
-        <button type="button" id="like" name="post_id" value="{{ politicianDetails.id }}" class="btn btn-primary">Like</button>
+        <button type="submit" id="like" name="post_id" value="{{ politicianDetails.id }}" class="btn btn-primary">Like</button>
     {% endif %}
 </form>
 {% endif %}

@@ -4,20 +4,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http404
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
 from django.template.loader import render_to_string
-from django.forms import modelformset_factory
 from django.contrib import messages
 
 # Create your views here.
 def home(request):
-    print(request.user.id)
-    # data_set = request.user.id
-    # print("****",data_set)
-    # data = {
-    #     'data_set':data_set,
-    # }
     return render(request, 'webpages/home.html')
 def about(request):
     return render(request, 'webpages/about.html')
@@ -32,48 +24,31 @@ def contact(request):
 
 def politiciandetails(request):
     # pk = request.GET.get('pk', None)
-    details = get_object_or_404(PoliticianDetail,id=3)
+    details = PoliticianDetail.objects.all
     userss = request.user.get_username()
-    is_liked = False
-    for like in details.likes:
-        print(like)
-    if details.likes.values_list(userss, flat=True):
-       is_liked = True
     data={
-        'total_likes':details.total_likes(),
+        # 'total_likes':PoliticianDetail.total_likes(),
         'details':details,
-        'is_liked':is_liked,
+        'userss':userss,
     }
     return render(request,'webpages/politiciandetails.html',data)
 
-# def update_likes(request):
-#     if request.method == 'POST':
-#         PoliticianDetails = PoliticianDetail.objects.get()
-#         PoliticianDetails.button_like =  request.POST['counter']
-#         PoliticianDetails.save()
-#         message = 'update successful'
-#     return HttpResponse(message)
-
-# def update_dislikes(request):
-    # if request.method == 'POST':
-    #     PoliticianDetails = PoliticianDetail.objects.get()
-    #     PoliticianDetails.button_dislike =  request.POST['counter']
-    #     PoliticianDetails.save()
-    #     message = 'update successful'
-    # return HttpResponse(message)
-
 def like_post(request):
-    
+    userss = request.user.get_username()
     post = get_object_or_404(PoliticianDetail, id=request.POST.get('id'))    
-    
-    is_liked = False
-    if post.likes.filter(id=request.user.id).exists():
-        post.likes.remove(request.user)
-        is_liked = False
+    first = PoliticianDetail(likes={'likes':[]})
+    first.save()
+    result = PoliticianDetail.objects.all()
+    like_list = result[id].likes
+    like_list['likes'].append(userss)
+    is_liked = True
+    # if post.likes.filter().exists():
+    #     post.likes.remove(request.user)
+    #     is_liked = False
         
-    else:
-        post.likes.add(request.user)
-        is_liked = True
+    # else:
+    #     post.likes.add(request.user)
+    #     is_liked = True
         
     context = {
         'post': post,

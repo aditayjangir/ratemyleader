@@ -49,26 +49,24 @@
 //       });
 //     window.onblur = onchange;
 // }
-
 $(document).ready(function(event){
-  $(document).on('click', '#like', function(event){
-      event.preventDefault();
-      var pk = $(this).attr('value');
-      $.ajax({
-          type: 'POST',
-          url: '{% url "like_post" %}',
-          data: {
-              'id': pk,
-              'csrfmiddlewaretoken': '{{ csrf_token }}'
-          },
-          datatype: 'json',
-          success: function(response){
-              $('#like-section').html(response['form'])
+    $(document).on('click', '#like', function(event){
+        event.preventDefault();
+        var pk = $(this).attr('value');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "likepost" %}',
+            data: {
+                'id': pk,
+            },
+            datatype: 'json',
+            // success: function(response){
+            //     $('#like-section').html(response['form'])
 
-          },
-          error: function(rs, e){
-              console.log(rs.responseText);
-          },
-      });
-  });
+            // },
+            // error: function(rs, e){
+            //     console.log(rs.responseText);
+            // },
+        });
+    });
 });
